@@ -55,7 +55,7 @@ Handles:
 - Signals
 - Threading and synchronization
 ## Additional Components to Include
-1. V8 Engine
+ ## 1. V8 Engine
  - Developed by Google in C++.
  - Executes your JavaScript code and compiles it into machine code via Just-In-Time (JIT) compilation.
  - Works tightly with Node.js core to allow JavaScript to invoke C++ bindings.
