@@ -118,3 +118,45 @@ Handles:
   | libuv        | C        | Event loop, async I/O, thread pool              |
   | OS APIs      | C        | Native event notification (epoll, kqueue, IOCP) |
   ```   
+ ## Garbage Collector (GC) — V8 Memory Management
+The Garbage Collector (GC) is part of the V8 engine and is responsible for automatically managing memory in Node.js.
+
+Responsibilities:
+ - Automatically allocates and frees memory so developers don’t need to manually manage it.
+ - Reclaims memory occupied by unreachable objects (no longer referenced in code).
+ - Prevents memory leaks and helps avoid crashes due to memory overflow.
+ ## How It Works:
+V8 uses a Generational Garbage Collection strategy:
+ - Splits memory into regions:
+ - New Space – stores short-lived objects.
+ -Old Space – stores long-lived objects.
+ - Uses different algorithms for each space:
+ - Scavenge (Copying Collector) for New Space.
+ - Mark-and-Sweep / Mark-and-Compact for Old Space.
+ ## GC Lifecycle:
+ - Allocate memory for new JS objects in New Space.
+ - If New Space fills → minor GC is triggered (Scavenge).
+ - Surviving objects are promoted to Old Space.
+ - Periodically, V8 runs major GC on Old Space using Mark-and-Sweep.
+## My Notes:
+ - GC is automatic, but you can trigger it manually (for testing/debug only):
+   ```
+    node --expose-gc
+    global.gc();
+
+   ```
+ -  Monitor GC behavior using:
+   ```
+    node --trace-gc
+
+   ```
+ ## When Memory Leaks Happen:
+ - Even with GC, memory leaks can occur if:
+ - Variables are kept in global scope unintentionally.
+ - Timers or intervals are not cleared (setInterval or setTimeout).
+ - Closures unintentionally hold references to outer scope.
+ - You store large data in memory (e.g. cache, logs) without limits.
+ ## Why It Matters:
+ - Explains how Node.js apps stay efficient without manual memory handling.
+ - Helps debug performance issues or memory leaks.
+ - Crucial for long-running apps (e.g. servers, background workers).   
